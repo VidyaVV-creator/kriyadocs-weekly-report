@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Weekly Status Report</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; background-color: #fcfcfc; }
+    h1 { color: #2e6fa0; }
+    h2 { margin-top: 40px; }
+    ul { margin-left: 20px; }
+    details { margin-bottom: 20px; }
+    summary { font-weight: bold; cursor: pointer; font-size: 1.1em; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 0.95em; }
+    th { background: #f4f4f4; }
+    .Completed { color: green; font-weight: bold; }
+    .Delayed { color: orange; font-weight: bold; }
+    .HighRisk { color: red; font-weight: bold; }
+    .Planned { color: blue; }
+    .SlipOver { color: goldenrod; }
+    canvas { max-width: 600px; margin: 40px auto 20px; display: block; }
+    footer { margin-top: 40px; font-size: 0.9em; color: #777; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <h1>📋 Weekly Status Report</h1>
+
+  <h2>Summary Metrics</h2>
+  <ul>
+    <li><strong>Total Open Issues:</strong> 105</li>
+    <li><strong>Total Completed:</strong> 5</li>
+    <li><strong>Completion Rate:</strong> 4.8%</li>
+    <li><strong>Major Components:</strong> Editor, Submission, Peer Review, Proof, References</li>
+    <li><strong>Risks Identified:</strong> 8 high-priority overdue tickets</li>
+    <li><strong>Planned for Next Week:</strong> 9 tickets in Fix Version 20250725</li>
+  </ul>
+
+  <canvas id="summaryChart"></canvas>
+  <script>
+    const ctx = document.getElementById('summaryChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Open', 'Completed', 'High Risk', 'Planned Next Week'],
+        datasets: [{
+          label: 'Tickets',
+          data: [105, 5, 8, 9],
+          backgroundColor: ['#6c5ce7', '#00b894', '#d63031', '#0984e3']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+
+  <details open>
+    <summary>✅ What Went Well</summary>
+    <table>
+      <thead><tr><th>Ticket</th><th>Summary</th><th>Dev</th><th>Assignee</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>KRIYAEP-9391</td><td>Local setup for Read me, env update</td><td>Chandru R</td><td>Pooja J</td><td class="Completed">Completed</td></tr>
+        <tr><td>KRIYAEP-9307</td><td>Unable to invite the Associate editor</td><td>Lochana P</td><td>Lochana P</td><td class="Completed">Completed</td></tr>
+        <tr><td>KRIYAEP-9268</td><td>Proof generating issue</td><td>Jayaganesh B</td><td>Akash Raman</td><td class="Completed">Completed</td></tr>
+        <tr><td>KRIYAEP-9225</td><td>Cancel the reviewers - bcj-2025-3217_C</td><td>Lochana P</td><td>Lochana P</td><td class="Completed">Completed</td></tr>
+        <tr><td>KRIYAEP-8523</td><td>Problems adding author response images</td><td>Saravanan V</td><td>Dharshini PK</td><td class="Completed">Completed</td></tr>
+      </tbody>
+    </table>
+  </details>
+
+  <details>
+    <summary>⏰ Delayed Items</summary>
+    <table>
+      <thead><tr><th>Ticket</th><th>Summary</th><th>Dev</th><th>Assignee</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>KRIYAEP-9355</td><td>Copyright statement in sub articles</td><td>Harini Padma M</td><td>—</td><td class="Delayed">Completed</td></tr>
+        <tr><td>KRIYAEP-9349</td><td>BMJ - Double spacing before surnames</td><td>Akash Raman</td><td>Abishekkumar</td><td class="Delayed">Completed</td></tr>
+        <tr><td>KRIYAEP-9227</td><td>Tiff image conversion to png</td><td>Ajay</td><td>—</td><td class="Delayed">Completed</td></tr>
+        <tr><td>KRIYAEP-9073</td><td>Sign off error message</td><td>Lochana P</td><td>Lochana P</td><td class="Delayed">Completed</td></tr>
+      </tbody>
+    </table>
+  </details>
+
+  <details>
+    <summary>⚠️ High Risk Items</summary>
+    <table>
+      <thead><tr><th>Ticket</th><th>Summary</th><th>Dev</th><th>Assignee</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>KRIYAEP-9367</td><td>Memory usage issue</td><td>Rahul RR</td><td>Sushmitha R</td><td class="HighRisk">To Do</td></tr>
+        <tr><td>KRIYAEP-9364</td><td>Save failure reported via email</td><td>Santhosh</td><td>Dharshini PK</td><td class="HighRisk">Publishing</td></tr>
+        <tr><td>KRIYAEP-9344</td><td>Log content saving failure</td><td>Rahul RR</td><td>Sushmitha R</td><td class="HighRisk">To Do</td></tr>
+        <tr><td>KRIYAEP-9274</td><td>Notification not triggered</td><td>Ajmal</td><td>Pooja J</td><td class="HighRisk">Validating</td></tr>
+        <tr><td>KRIYAEP-9300</td><td>Email logging on cancellation</td><td>Maurus Maria</td><td>—</td><td class="HighRisk">Planning</td></tr>
+      </tbody>
+    </table>
+  </details>
+
+  <details>
+    <summary>📅 Planned for Next Week</summary>
+    <table>
+      <thead><tr><th>Ticket</th><th>Summary</th><th>Dev</th><th>Assignee</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>KRIYAEP-9403</td><td>Affiliation section heading missing</td><td>Hemamalini</td><td>Nagendran N</td><td class="Planned">Planning</td></tr>
+        <tr><td>KRIYAEP-9336</td><td>Integrate K-Tagger</td><td>Chandru R</td><td>Pooja J</td><td class="Planned">Planning</td></tr>
+        <tr><td>KRIYAEP-9224</td><td>SEG sign off bugs</td><td>balaji a</td><td>—</td><td class="Planned">Needs Feedback</td></tr>
+      </tbody>
+    </table>
+  </details>
+
+  <footer>Report generated by Kriyadocs Automation | Fix Version: 20250718</footer>
+</body>
+</html>
