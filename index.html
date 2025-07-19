@@ -1,1435 +1,3164 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Weekly Status Report</title>
+  <meta charset="UTF-8">
+  <title>Weekly Status Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 30px; background-color: #fcfcfc; }
+    body { font-family: Arial, sans-serif; margin: 40px; background-color: #fcfcfc; }
     h1 { color: #2e6fa0; }
     h2 { margin-top: 40px; }
-    ul { margin-left: 20px; }
-    details { margin-bottom: 20px; }
-    summary { font-weight: bold; cursor: pointer; font-size: 1.1em; }
     table { border-collapse: collapse; width: 100%; margin-top: 10px; }
     th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 0.95em; }
     th { background: #f4f4f4; }
+    summary { font-weight: bold; cursor: pointer; font-size: 1.1em; margin-top: 20px; }
+    details { margin-bottom: 30px; }
     .Completed { color: green; font-weight: bold; }
     .Delayed { color: orange; font-weight: bold; }
-    .HighRisk { color: red; font-weight: bold; }
-    .Planned { color: blue; }
-    .SlipOver { color: goldenrod; }
-    canvas { max-width: 700px; margin: 40px auto 20px; display: block; }
-    footer { margin-top: 40px; font-size: 0.9em; color: #777; text-align: center; }
+    .Risk { color: red; font-weight: bold; }
+    .Slipped { color: goldenrod; font-weight: bold; }
+    footer { margin-top: 50px; font-size: 0.9em; color: #777; text-align: center; }
+    canvas { max-width: 1000px; margin-top: 40px; display: block; }
   </style>
 </head>
 <body>
 
-  <h1>📋 Weekly Status Report</h1>
+<h1>📋 Weekly Status Report — Fix Version: 20250718</h1>
 
-  <h2>Summary Metrics</h2>
-  <ul>
-    <li><strong>Total Open Issues:</strong> 126</li>
-    <li><strong>Total Completed:</strong> 0</li>
-    <li><strong>Completion Rate:</strong> 0.0%</li>
-    <li><strong>Major Components:</strong> Peer Review, Submission, Editor, Proof, Unassigned</li>
-    <li><strong>Risks Identified:</strong> 32</li>
-    <li><strong>Planned for Next Week:</strong> 20</li>
-  </ul>
+<h2>📊 Product Area Summary</h2>
+<table>
+  <thead>
+    <tr><th>Product Area</th><th>Completed</th><th>Slipped</th><th>Risk</th></tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>Proof</td>
+      <td>2</td>
+      <td>11</td>
+      <td>6</td>
+    </tr>
+    
+    <tr>
+      <td>Pre-Editing & Checks</td>
+      <td>1</td>
+      <td>4</td>
+      <td>0</td>
+    </tr>
+    
+    <tr>
+      <td>Editor</td>
+      <td>3</td>
+      <td>13</td>
+      <td>5</td>
+    </tr>
+    
+    <tr>
+      <td>Submission</td>
+      <td>2</td>
+      <td>18</td>
+      <td>7</td>
+    </tr>
+    
+    <tr>
+      <td>Final Deliverables</td>
+      <td>1</td>
+      <td>3</td>
+      <td>0</td>
+    </tr>
+    
+    <tr>
+      <td>Configuration</td>
+      <td>0</td>
+      <td>3</td>
+      <td>1</td>
+    </tr>
+    
+    <tr>
+      <td>Peer Review</td>
+      <td>3</td>
+      <td>35</td>
+      <td>15</td>
+    </tr>
+    
+    <tr>
+      <td>Dashboard</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+    </tr>
+    
+    <tr>
+      <td>LaTex Typesetting</td>
+      <td>1</td>
+      <td>5</td>
+      <td>0</td>
+    </tr>
+    
+    <tr>
+      <td>User Management</td>
+      <td>0</td>
+      <td>3</td>
+      <td>1</td>
+    </tr>
+    
+    <tr>
+      <td>LQC</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+    </tr>
+    
+    <tr>
+      <td>References</td>
+      <td>0</td>
+      <td>7</td>
+      <td>5</td>
+    </tr>
+    
+    <tr>
+      <td>Reports</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    
+    <tr>
+      <td>DevOps</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    
+    <tr>
+      <td>Issue Binder</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+    </tr>
+    
+    <tr>
+      <td>Functional</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    
+    <tr>
+      <td>Platform</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    
+    <tr>
+      <td>Checker</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    
+  </tbody>
+</table>
 
-  <canvas id="summaryChart"></canvas>
-  <script>
-    const ctx = document.getElementById('summaryChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Open', 'Completed', 'High Risk', 'Planned Next Week'],
-        datasets: [{
-          label: 'Tickets',
-          data: [126, 0, 32, 20],
-          backgroundColor: ['#6c5ce7', '#00b894', '#d63031', '#0984e3']
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true } }
+<h2>👥 Capacity Overview by Developer</h2>
+<table>
+  <thead>
+    <tr><th>Developer</th><th>Total Tickets</th><th>Breakdown</th></tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>Harini Padma M</td>
+      <td>4</td>
+      <td>Proof [To Do]: 1; Proof [Publishing]: 1; Proof [Building]: 2</td>
+    </tr>
+    
+    <tr>
+      <td>Ajmal Dhahsin K</td>
+      <td>9</td>
+      <td>Peer Review [Planning]: 2; Peer Review [Validating]: 2; Peer Review [Publishing]: 1; Peer Review [Monitoring]: 1; Peer Review [Needs Feedback]: 1; Peer Review [To Do]: 1; Configuration [Validating]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Srirangan K</td>
+      <td>5</td>
+      <td>Pre-Editing & Checks [Validating]: 1; Pre-Editing & Checks [Building]: 1; References [Building]: 2; References [Planning]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Tharun</td>
+      <td>6</td>
+      <td>Issue Binder [Planning]: 2; Issue Binder [To Do]: 1; Issue Binder [Validating]: 1; Editor [Validating]: 1; Functional [Building]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Sreenaath V</td>
+      <td>2</td>
+      <td>Editor [Validating]: 1; Peer Review [Completed]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Jayaganesh B</td>
+      <td>1</td>
+      <td>Editor [Completed]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Krithika S</td>
+      <td>7</td>
+      <td>Submission [Validating]: 1; Submission [Planning]: 3; Submission [Building]: 1; Submission [Monitoring]: 1; Submission [Publishing]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Santhosh</td>
+      <td>9</td>
+      <td>Editor [Building]: 1; Editor [Completed]: 1; Editor [Planning]: 1; Editor [To Do]: 1; Editor [Monitoring]: 1; Unassigned [Planning]: 3; Unassigned [Building]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Rahul RR</td>
+      <td>6</td>
+      <td>Editor [Preparing]: 1; Editor [Monitoring]: 1; Editor [To Do]: 2; Unassigned [Planning]: 1; Pre-Editing & Checks [Publishing]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Shiva Sharvesh</td>
+      <td>2</td>
+      <td>Platform [Planning]: 1; Peer Review [Publishing]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Kavitha Priyadharshni</td>
+      <td>2</td>
+      <td>LQC [Planning]: 1; LQC [Building]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Akash Raman</td>
+      <td>7</td>
+      <td>Proof [Completed]: 2; Proof [Building]: 4; Proof [Planning]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Saravanan V</td>
+      <td>4</td>
+      <td>Proof [Publishing]: 1; Editor [Planning]: 1; Editor [Completed]: 1; Checker [Planning]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Hemamalini</td>
+      <td>3</td>
+      <td>Final Deliverables [Completed]: 1; Final Deliverables [Validating]: 1; Proof [Planning]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Chandru R</td>
+      <td>15</td>
+      <td>Submission [Completed]: 1; Submission [Planning]: 5; Submission [Publishing]: 1; Submission [To Do]: 4; Submission [Validating]: 2; Peer Review [Building]: 1; Peer Review [Publishing]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Arvindh kumar K</td>
+      <td>8</td>
+      <td>Peer Review [Planning]: 2; Peer Review [Publishing]: 3; Peer Review [Preparing]: 1; User Management [Building]: 1; Submission [Publishing]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Shilpa Veronica</td>
+      <td>6</td>
+      <td>Peer Review [Publishing]: 2; Peer Review [Building]: 1; Peer Review [Validating]: 1; Dashboard [Monitoring]: 1; Dashboard [Needs Feedback]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Lochana P</td>
+      <td>3</td>
+      <td>Peer Review [To Do]: 1; Peer Review [Completed]: 2</td>
+    </tr>
+    
+    <tr>
+      <td>Maurus Maria Rubenson A</td>
+      <td>11</td>
+      <td>Peer Review [Planning]: 3; Peer Review [Publishing]: 5; Peer Review [Building]: 1; Peer Review [Validating]: 1; Peer Review [To Do]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Prince Daniel</td>
+      <td>4</td>
+      <td>Dashboard [Publishing]: 1; Submission [Completed]: 1; Submission [Publishing]: 1; Peer Review [Monitoring]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Praveenkumar A</td>
+      <td>3</td>
+      <td>Final Deliverables [Building]: 2; Pre-Editing & Checks [Completed]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Lekha Shree</td>
+      <td>3</td>
+      <td>DevOps [Planning]: 1; DevOps [Completed]: 1; Proof [Publishing]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Ajay</td>
+      <td>7</td>
+      <td>LaTex Typesetting [Completed]: 1; LaTex Typesetting [Monitoring]: 3; LaTex Typesetting [Publishing]: 2; Proof [Building]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Bala</td>
+      <td>1</td>
+      <td>Unassigned [To Do]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>balaji a</td>
+      <td>9</td>
+      <td>User Management [Planning]: 2; Peer Review [Building]: 1; Peer Review [Publishing]: 2; Peer Review [To Do]: 2; Peer Review [Planning]: 1; Configuration [Building]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Pravesh MS</td>
+      <td>2</td>
+      <td>References [Planning]: 1; References [Preparing]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Pradhesh Kumar R</td>
+      <td>2</td>
+      <td>Reports [Planning]: 1; Pre-Editing & Checks [Building]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Merclin A</td>
+      <td>1</td>
+      <td>Unassigned [Validating]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Ramnath K</td>
+      <td>1</td>
+      <td>Proof [Building]: 1</td>
+    </tr>
+    
+    <tr>
+      <td>Aarthi R</td>
+      <td>1</td>
+      <td>Configuration [Planning]: 1</td>
+    </tr>
+    
+  </tbody>
+</table>
+
+<h2>📈 Assignee Bell Curve</h2>
+<canvas id="bellChart"></canvas>
+<script>
+const bellCtx = document.getElementById('bellChart').getContext('2d');
+const bellLabels = ["Chandru R", "Maurus Maria Rubenson A", "Ajmal Dhahsin K", "balaji a", "Santhosh", "Arvindh kumar K", "Ajay", "Krithika S", "Akash Raman", "Tharun", "Rahul RR", "Shilpa Veronica", "Srirangan K", "Prince Daniel", "Harini Padma M", "Saravanan V", "Hemamalini", "Lochana P", "Praveenkumar A", "Lekha Shree", "Kavitha Priyadharshni", "Shiva Sharvesh", "Sreenaath V", "Pravesh MS", "Pradhesh Kumar R", "Jayaganesh B", "Bala", "Merclin A", "Ramnath K", "Aarthi R"];
+const bellData = [15, 11, 9, 9, 9, 8, 7, 7, 7, 6, 6, 6, 5, 4, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1];
+
+new Chart(bellCtx, {
+  type: 'bar',
+  data: {
+    labels: bellLabels,
+    datasets: [{
+      label: 'Assigned Tickets',
+      data: bellData,
+      backgroundColor: '#0984e3'
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    scales: { x: { beginAtZero: true } },
+    plugins: { legend: { display: false } }
+  }
+});
+</script>
+
+<h2>📌 Component-wise Load (Grouped by Domain)</h2>
+<canvas id="componentChart"></canvas>
+<script>
+const ctx = document.getElementById('componentChart').getContext('2d');
+const compLabels = ["Editorial", "Platform", "Production", "Infrastructure", "Other"];
+const devs = ["Chandru R", "Maurus Maria Rubenson A", "Ajmal Dhahsin K", "balaji a", "Santhosh", "Arvindh kumar K", "Ajay", "Krithika S", "Akash Raman", "Tharun", "Rahul RR", "Shilpa Veronica", "Srirangan K", "Prince Daniel", "Harini Padma M", "Saravanan V", "Hemamalini", "Lochana P", "Praveenkumar A", "Lekha Shree", "Kavitha Priyadharshni", "Shiva Sharvesh", "Sreenaath V", "Pravesh MS", "Pradhesh Kumar R", "Jayaganesh B", "Bala", "Merclin A", "Ramnath K", "Aarthi R"];
+const rawData = {"Editorial": {"Ajmal Dhahsin K": 8, "Arvindh kumar K": 6, "Chandru R": 2, "Jayaganesh B": 1, "Lochana P": 3, "Maurus Maria Rubenson A": 11, "Pravesh MS": 2, "Prince Daniel": 1, "Rahul RR": 4, "Santhosh": 5, "Saravanan V": 2, "Shilpa Veronica": 4, "Shiva Sharvesh": 1, "Sreenaath V": 2, "Srirangan K": 3, "Tharun": 1, "balaji a": 6}, "Infrastructure": {"Lekha Shree": 2, "Pradhesh Kumar R": 1, "Tharun": 1}, "Other": {"Kavitha Priyadharshni": 2}, "Platform": {"Aarthi R": 1, "Ajmal Dhahsin K": 1, "Arvindh kumar K": 2, "Chandru R": 13, "Krithika S": 7, "Prince Daniel": 3, "Shilpa Veronica": 2, "Shiva Sharvesh": 1, "Tharun": 4, "balaji a": 3}, "Production": {"Ajay": 7, "Akash Raman": 7, "Harini Padma M": 4, "Hemamalini": 3, "Lekha Shree": 1, "Pradhesh Kumar R": 1, "Praveenkumar A": 3, "Rahul RR": 1, "Ramnath K": 1, "Saravanan V": 2, "Srirangan K": 2}};
+
+const datasets = devs.map((dev, idx) => ({
+  label: dev,
+  data: compLabels.map(comp => rawData[comp]?.[dev] || 0),
+  backgroundColor: `hsl(${(idx * 60) % 360}, 70%, 60%)`
+}));
+
+new Chart(ctx, {
+  type: 'bar',
+  data: { labels: compLabels, datasets: datasets },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: function(tooltipItem) {
+            const data = tooltipItem.chart.data;
+            const total = data.datasets.reduce((sum, ds) => sum + ds.data[tooltipItem.dataIndex], 0);
+            const value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.dataIndex];
+            const percent = ((value / total) * 100).toFixed(1);
+            const label = data.datasets[tooltipItem.datasetIndex].label;
+            return `${label}: ${value} (${percent}%)`;
+          }
+        }
       }
-    });
-  </script>
+    },
+    scales: { y: { beginAtZero: true } }
+  }
+});
+</script>
 
-  <h2>👥 Developer Contribution Overview</h2>
+<h2>📁 Ticket Details</h2>
+
+<details open>
+  <summary>✅ Completed On Time (14)</summary>
   <table>
     <thead>
-      <tr>
-        <th>Developer</th>
-        <th>Total Tickets</th>
-        <th>Completed</th>
-        <th>Delayed</th>
-        <th>High Risk</th>
-      </tr>
+      <tr><th>Ticket</th><th>Summary</th><th>Product Area</th><th>Assignee</th><th>Dev</th><th>QA</th><th>Status</th></tr>
     </thead>
     <tbody>
       
       <tr>
-        <td>Tharun</td>
-        <td>6</td>
-        <td>0</td>
-        <td>0</td>
-        <td>1</td>
-      </tr>
-      
-      <tr>
-        <td>Sreenaath V</td>
-        <td>2</td>
-        <td>0</td>
-        <td>0</td>
-        <td>1</td>
-      </tr>
-      
-      <tr>
+        <td>KRIYAEP-9482</td>
+        <td>L3 | bcr-2024-263381 | "Perspective patients" box issue</td>
+        <td>Editor</td>
         <td>Jayaganesh B</td>
-        <td>1</td>
-        <td>1</td>
-        <td>0</td>
-        <td>1</td>
+        <td>Jayaganesh B</td>
+        <td>Abishekkumar</td>
+        <td class="Completed">Completed</td>
       </tr>
       
       <tr>
-        <td>Ajmal Dhahsin K</td>
-        <td>5</td>
-        <td>0</td>
-        <td>0</td>
-        <td>1</td>
-      </tr>
-      
-      <tr>
-        <td></td>
-        <td>24</td>
-        <td>0</td>
-        <td>0</td>
-        <td>1</td>
-      </tr>
-      
-      <tr>
-        <td>Krithika S</td>
-        <td>6</td>
-        <td>0</td>
-        <td>0</td>
-        <td>1</td>
-      </tr>
-      
-      <tr>
+        <td>KRIYAEP-9448</td>
+        <td>Queries missing tag and Table placed in wrong position</td>
+        <td>Editor</td>
         <td>Santhosh</td>
-        <td>9</td>
-        <td>1</td>
-        <td>0</td>
-        <td>2</td>
+        <td>Santhosh</td>
+        <td>Unassigned</td>
+        <td class="Completed">Completed</td>
       </tr>
       
       <tr>
-        <td>Rahul RR</td>
-        <td>6</td>
-        <td>0</td>
-        <td>0</td>
-        <td>2</td>
-      </tr>
-      
-      <tr>
-        <td>Shiva Sharvesh</td>
-        <td>2</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-      </tr>
-      
-      <tr>
-        <td>Kavitha Priyadharshni</td>
-        <td>2</td>
-        <td>0</td>
-        <td>0</td>
-        <td>1</td>
-      </tr>
-      
-      <tr>
+        <td>KRIYAEP-9447</td>
+        <td>ASM - Customizing straddle ruler of table heading</td>
+        <td>Proof</td>
         <td>Akash Raman</td>
-        <td>7</td>
-        <td>2</td>
-        <td>0</td>
-        <td>6</td>
+        <td>Akash Raman</td>
+        <td>Abishekkumar</td>
+        <td class="Completed">Completed</td>
       </tr>
       
       <tr>
-        <td>Saravanan V</td>
-        <td>4</td>
-        <td>1</td>
-        <td>0</td>
-        <td>0</td>
-      </tr>
-      
-      <tr>
+        <td>KRIYAEP-9420</td>
+        <td>CLONE - eLife: Archived article 100666 showing assigned to James</td>
+        <td>Final Deliverables</td>
         <td>Hemamalini</td>
-        <td>2</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
+        <td>Hemamalini</td>
+        <td>Hemamalini</td>
+        <td class="Completed">Completed</td>
       </tr>
       
       <tr>
+        <td>KRIYAEP-9391</td>
+        <td>Local setup for Read me, env update</td>
+        <td>Submission</td>
         <td>Chandru R</td>
-        <td>15</td>
-        <td>1</td>
-        <td>0</td>
-        <td>2</td>
+        <td>Chandru R</td>
+        <td>Pooja J</td>
+        <td class="Completed">Completed</td>
       </tr>
       
       <tr>
-        <td>Srirangan K</td>
-        <td>4</td>
-        <td>0</td>
-        <td>0</td>
-        <td>3</td>
+        <td>KRIYAEP-9268</td>
+        <td>L3| elife_105065 | proof generating issue</td>
+        <td>Proof</td>
+        <td>Jayaganesh B</td>
+        <td>Akash Raman</td>
+        <td>Unassigned</td>
+        <td class="Completed">Completed</td>
       </tr>
       
       <tr>
-        <td>Harini Padma M</td>
-        <td>1</td>
-        <td>0</td>
-        <td>0</td>
-        <td>1</td>
-      </tr>
-      
-      <tr>
-        <td>Arvindh kumar K</td>
-        <td>6</td>
-        <td>0</td>
-        <td>0</td>
-        <td>3</td>
-      </tr>
-      
-      <tr>
-        <td>Shilpa Veronica</td>
-        <td>5</td>
-        <td>0</td>
-        <td>0</td>
-        <td>1</td>
-      </tr>
-      
-      <tr>
-        <td>Lochana P</td>
-        <td>3</td>
-        <td>2</td>
-        <td>0</td>
-        <td>3</td>
-      </tr>
-      
-      <tr>
-        <td>Maurus Maria Rubenson A</td>
-        <td>7</td>
-        <td>0</td>
-        <td>0</td>
-        <td>1</td>
-      </tr>
-      
-      <tr>
+        <td>KRIYAEP-9267</td>
+        <td>Configure new affiliations UI for jmir</td>
+        <td>Submission</td>
+        <td>RAGHU VISHNU S</td>
         <td>Prince Daniel</td>
-        <td>4</td>
-        <td>1</td>
-        <td>0</td>
-        <td>1</td>
+        <td>Pooja J</td>
+        <td class="Completed">Completed</td>
       </tr>
       
       <tr>
-        <td>Praveenkumar A</td>
-        <td>3</td>
-        <td>0</td>
-        <td>0</td>
-        <td>1</td>
-      </tr>
-      
-      <tr>
-        <td>Lekha Shree</td>
-        <td>3</td>
-        <td>1</td>
-        <td>0</td>
-        <td>1</td>
-      </tr>
-      
-      <tr>
+        <td>KRIYAEP-9227</td>
+        <td>Tiff image conversion to png</td>
+        <td>LaTex Typesetting</td>
         <td>Ajay</td>
-        <td>7</td>
-        <td>1</td>
-        <td>0</td>
-        <td>0</td>
+        <td>Ajay</td>
+        <td>Unassigned</td>
+        <td class="Completed">Completed</td>
       </tr>
       
       <tr>
-        <td>balaji a</td>
-        <td>5</td>
-        <td>0</td>
-        <td>0</td>
-        <td>2</td>
+        <td>KRIYAEP-9225</td>
+        <td>L3 | Unable to cancel the reviewers - bcj-2025-3217_C</td>
+        <td>Peer Review</td>
+        <td>Lochana P</td>
+        <td>Lochana P</td>
+        <td>Lochana P</td>
+        <td class="Completed">Completed</td>
       </tr>
       
       <tr>
-        <td>Pravesh MS</td>
-        <td>2</td>
-        <td>0</td>
-        <td>0</td>
-        <td>2</td>
+        <td>KRIYAEP-9073</td>
+        <td>L3 | Unable to sign off, as an error message appears during the process. - jgsi_2025_111</td>
+        <td>Peer Review</td>
+        <td>Lochana P</td>
+        <td>Lochana P</td>
+        <td>Lochana P</td>
+        <td class="Completed">Completed</td>
       </tr>
       
       <tr>
-        <td>Pradhesh Kumar R</td>
-        <td>2</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
+        <td>KRIYAEP-8862</td>
+        <td>Integrate XSD Module for XML Validation</td>
+        <td>Pre-Editing & Checks</td>
+        <td>Praveenkumar A</td>
+        <td>Praveenkumar A</td>
+        <td>Abishekkumar</td>
+        <td class="Completed">Completed</td>
       </tr>
       
       <tr>
-        <td>Merclin A</td>
-        <td>1</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
+        <td>KRIYAEP-8523</td>
+        <td>CLONE - Problems adding new author response images to articles</td>
+        <td>Editor</td>
+        <td>Saravanan V</td>
+        <td>Saravanan V</td>
+        <td>dharshini PK</td>
+        <td class="Completed">Completed</td>
       </tr>
       
       <tr>
-        <td>Ramnath K</td>
-        <td>1</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
+        <td>KRIYAEP-8274</td>
+        <td>BJP| BJJ | STAGING INDESIGN PDF FAILURE</td>
+        <td>DevOps</td>
+        <td>Lekha Shree</td>
+        <td>Lekha Shree</td>
+        <td>Unassigned</td>
+        <td class="Completed">Completed</td>
       </tr>
       
       <tr>
-        <td>Aarthi R</td>
-        <td>1</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
+        <td>KRIYAEP-1002</td>
+        <td>L3 | When adding a new reviewer, their name is getting duplicated and shown multiple times</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Sreenaath V</td>
+        <td>Unassigned</td>
+        <td class="Completed">Completed</td>
       </tr>
       
     </tbody>
   </table>
+</details>
 
-  <canvas id="devChart"></canvas>
-  <script>
-    const devCtx = document.getElementById('devChart').getContext('2d');
-    new Chart(devCtx, {
-      type: 'bar',
-      data: {
-        labels: ['Tharun','Sreenaath V','Jayaganesh B','Ajmal Dhahsin K','','Krithika S','Santhosh','Rahul RR','Shiva Sharvesh','Kavitha Priyadharshni','Akash Raman','Saravanan V','Hemamalini','Chandru R','Srirangan K','Harini Padma M','Arvindh kumar K','Shilpa Veronica','Lochana P','Maurus Maria Rubenson A','Prince Daniel','Praveenkumar A','Lekha Shree','Ajay','balaji a','Pravesh MS','Pradhesh Kumar R','Merclin A','Ramnath K','Aarthi R',],
-        datasets: [{
-          label: 'Assigned Tickets',
-          data: [6,2,1,5,24,6,9,6,2,2,7,4,2,15,4,1,6,5,3,7,4,3,3,7,5,2,2,1,1,1,],
-          backgroundColor: '#00b894'
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { ticks: { autoSkip: false, maxRotation: 60, minRotation: 30 }},
-          y: { beginAtZero: true }
-        }
-      }
-    });
-  </script>
+<details >
+  <summary>⏰ Completed Late (0)</summary>
+  <table>
+    <thead>
+      <tr><th>Ticket</th><th>Summary</th><th>Product Area</th><th>Assignee</th><th>Dev</th><th>QA</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      
+    </tbody>
+  </table>
+</details>
 
-  
-    <details open>
-      <summary>✅ What Went Well</summary>
-      <table>
-        <thead>
-          <tr>
-            <th>Ticket</th>
-            <th>Summary</th>
-            <th>Dev</th>
-            <th>Assignee</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          
-        </tbody>
-      </table>
-    </details>
-  
-    <details >
-      <summary>⏰ Delayed Items</summary>
-      <table>
-        <thead>
-          <tr>
-            <th>Ticket</th>
-            <th>Summary</th>
-            <th>Dev</th>
-            <th>Assignee</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          
-        </tbody>
-      </table>
-    </details>
-  
-    <details >
-      <summary>🔁 Slip Overs</summary>
-      <table>
-        <thead>
-          <tr>
-            <th>Ticket</th>
-            <th>Summary</th>
-            <th>Dev</th>
-            <th>Assignee</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          
-          <tr>
-            <td>KRIYAEP-9477</td>
-            <td>Show the customer specific dropdown in submission page </td>
-            <td>Krithika S</td>
-            <td>Krithika S</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9476</td>
-            <td>Publication time function not working – defaulting all papers to 10 AM EST</td>
-            <td>Santhosh</td>
-            <td>Santhosh</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9438</td>
-            <td>RS - Export PDF enhancement</td>
-            <td>Saravanan V</td>
-            <td>dharshini PK</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9413</td>
-            <td>CLONE - JMIR| "JMIRx Med" option is missing in "Edit Section"</td>
-            <td>Santhosh</td>
-            <td>Santhosh</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9412</td>
-            <td>CLONE - Displaying updated word count and reference and page counts in the sign-off email at Copyediting Triage</td>
-            <td>Rahul RR</td>
-            <td>Akash selvin J</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9401</td>
-            <td>PMC failure issue</td>
-            <td>Saravanan V</td>
-            <td>Saravanan V</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9381</td>
-            <td>Locking of fields in the submission page for SEG customer</td>
-            <td></td>
-            <td>Merclin A</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9367</td>
-            <td>Memory usage issue</td>
-            <td>Rahul RR</td>
-            <td>Rahul RR</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9364</td>
-            <td>Save failure - reported via email</td>
-            <td>Santhosh</td>
-            <td>Vassantha Sundar</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9363</td>
-            <td>CUR - RS | Content saving issue in Author review stage</td>
-            <td>Santhosh</td>
-            <td>Santhosh</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9362</td>
-            <td>JAMA demo readiness  - fixing feedback points</td>
-            <td>Srirangan K</td>
-            <td>Praveenkumar A</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9355</td>
-            <td>RCGB|Copyright statement in sub articles</td>
-            <td>Harini Padma M</td>
-            <td>Harini Padma M</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9349</td>
-            <td>BMJ - Double spacing before surnames in Proof of TypesetterCheck articles</td>
-            <td>Akash Raman</td>
-            <td>Akash Raman</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9344</td>
-            <td>Log content saving failure and display in a dashboard</td>
-            <td>Rahul RR</td>
-            <td>Rahul RR</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9339</td>
-            <td>Proofing - Update testcases for bmj customer in proofdatasetter service</td>
-            <td>Akash Raman</td>
-            <td>Akash Raman</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9314</td>
-            <td>Multirole switching - Unable to access production articles when trying to switch roles</td>
-            <td>Shilpa Veronica</td>
-            <td>Nitya S</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9307</td>
-            <td>L3 | PPlBIO | Unable to invite the Associate editor. - bio_2025_128 bio_2025_131 bio_2025_135, bio_2025_136</td>
-            <td>Lochana P</td>
-            <td>Lochana P</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9302</td>
-            <td>Normalize Author and Reviewer Emails to Lowercase after successful Submission</td>
-            <td>Chandru R</td>
-            <td>Pooja J</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9285</td>
-            <td>Author Feedback Report</td>
-            <td></td>
-            <td>Pradhesh Kumar R</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9274</td>
-            <td>L3 | GSW | SE Notification Not Triggered After Completion of Two Reviews – lithosphere_2025_134</td>
-            <td>Ajmal Dhahsin K</td>
-            <td>Lochana P</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9273</td>
-            <td>configure quick_actions for jmir</td>
-            <td>Prince Daniel</td>
-            <td>Nitya S</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9263</td>
-            <td>PPL Researcher dashboard email to address changes for authors</td>
-            <td>Shilpa Veronica</td>
-            <td>Akash selvin J</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9241</td>
-            <td>Report Dashboard UI | Discussion and Planning for Integration & Development</td>
-            <td>Praveenkumar A</td>
-            <td>Hemamalini</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9216</td>
-            <td>handling prefix while structuring link node</td>
-            <td>Ajay</td>
-            <td>Ajay</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9213</td>
-            <td>PPL | Draft decision letter fails to save</td>
-            <td>Ajmal Dhahsin K</td>
-            <td>Akash selvin J</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9212</td>
-            <td>Extension of due date before acceptance is not reflecting in any of the emails, landing pages, chasers</td>
-            <td>Maurus Maria Rubenson A</td>
-            <td>Nitya S</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9211</td>
-            <td>PPL | Editing of reviewer details is not working</td>
-            <td>Ajmal Dhahsin K</td>
-            <td>Shiva Karthikeyan</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9208</td>
-            <td>Reviewer extension is not working shows up invalid due date</td>
-            <td>Maurus Maria Rubenson A</td>
-            <td>ArunRam</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9166</td>
-            <td>Sign in with a Kriyadocs account </td>
-            <td>Arvindh kumar K</td>
-            <td>Arvindh kumar K</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9157</td>
-            <td>PDS adding functionParams in components config</td>
-            <td>Ajay</td>
-            <td>Ajay</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9138</td>
-            <td>Files doesn't show up in editor page after author revision</td>
-            <td>Chandru R</td>
-            <td>Chandru R</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9124</td>
-            <td>Document what is done in current Pretransformation process</td>
-            <td>Hemamalini</td>
-            <td>Hemamalini</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9067</td>
-            <td>Enable name and email copy functionality in reviewer history</td>
-            <td>Arvindh kumar K</td>
-            <td>Arvindh kumar K</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9038</td>
-            <td>CLONE - Articles with no "Cite this article" text</td>
-            <td>Lekha Shree</td>
-            <td>Lekha Shree</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9035</td>
-            <td>Enable LQC for Author Query</td>
-            <td>Kavitha Priyadharshni</td>
-            <td>Kavitha Priyadharshni</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8978</td>
-            <td>UX improvements in Reviewer assignment widget</td>
-            <td>Maurus Maria Rubenson A</td>
-            <td>Maurus Maria Rubenson A</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8961</td>
-            <td>Transfer UI view is not linked to the "Open manuscript" button when author dashboard</td>
-            <td>Shilpa Veronica</td>
-            <td>ArunRam</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8944</td>
-            <td>Display Author Suffix Field in Reference Editor</td>
-            <td>Pravesh MS</td>
-            <td>Pravesh MS</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8928</td>
-            <td>Option to Retain Edits for Titles in Reference Editor</td>
-            <td>Pravesh MS</td>
-            <td>Pravesh MS</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8912</td>
-            <td>Display Last Follow-up Details in Invite & Track Widget</td>
-            <td>Maurus Maria Rubenson A</td>
-            <td>Maurus Maria Rubenson A</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8885</td>
-            <td>L3 | The associate editor decision is missing in the review history section - lithosphere_2025_115, lithosphere_2025_138, Lithosphere_2024_172</td>
-            <td>Arvindh kumar K</td>
-            <td>Arvindh kumar K</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8862</td>
-            <td>Integrate XSD Module for XML Validation</td>
-            <td>Praveenkumar A</td>
-            <td>Praveenkumar A</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8859</td>
-            <td>SEG  researcher dashboard issues</td>
-            <td>Shilpa Veronica</td>
-            <td>Shilpa Veronica</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8835</td>
-            <td>PPL | Chaser use case for reassignment of editors from the flyout</td>
-            <td>Shiva Sharvesh</td>
-            <td>Shiva Karthikeyan</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8816</td>
-            <td>Error logging for all the errors thrown</td>
-            <td>Ajay</td>
-            <td>Ajay</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8804</td>
-            <td>Migration of Peer Review Master Report to Elastic Query</td>
-            <td>Pradhesh Kumar R</td>
-            <td>Pradhesh Kumar R</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8740</td>
-            <td>Proof Failure Analyzation</td>
-            <td>Ajay</td>
-            <td>Ajay</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8725</td>
-            <td>Latex Log Parser</td>
-            <td>Ajay</td>
-            <td>Ajay</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8650</td>
-            <td>Manual/automated rejection for transfer offers without response</td>
-            <td>Maurus Maria Rubenson A</td>
-            <td>Maurus Maria Rubenson A</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8557</td>
-            <td>Bibman reference Validation</td>
-            <td>Srirangan K</td>
-            <td>Vignesh</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8541</td>
-            <td> Ensure Hidden Fields Are Not Submitted or Validated </td>
-            <td>Chandru R</td>
-            <td>Prince Daniel</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8540</td>
-            <td>Enforce Conditional Validation Rules on a Field </td>
-            <td>Chandru R</td>
-            <td>Prince Daniel</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8504</td>
-            <td>Validate Existing Author Invitations Before Sending New Invite </td>
-            <td>Arvindh kumar K</td>
-            <td>ArunRam</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8492</td>
-            <td>Indicate Contextual Inline Comments in Decision Emails</td>
-            <td>balaji a</td>
-            <td>balaji a</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8485</td>
-            <td>Auto-Validate Uploaded Figure Image Resolution</td>
-            <td>Krithika S</td>
-            <td>ArunRam</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8406</td>
-            <td>RCGP - Incorrect structure of Reference with bold brackets in Proofing</td>
-            <td>Akash Raman</td>
-            <td>Akash Raman</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8385</td>
-            <td>Workflow stages checklist - When sign off to "Author revision" in (Editorial office decision) - Wrongly went to Editorial office decision stage after author revision</td>
-            <td>Merclin A</td>
-            <td>Deivanai</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8320</td>
-            <td>Generate and Store Multiple Cover Image Versions from Single Upload</td>
-            <td>Tharun</td>
-            <td>Nagendran N</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8234</td>
-            <td>Accuracy improvement in References</td>
-            <td>Srirangan K</td>
-            <td>Srirangan K</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8196</td>
-            <td>Reporting</td>
-            <td>Srirangan K</td>
-            <td>Srirangan K</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8160</td>
-            <td>Template spec for RSOS</td>
-            <td>Ajay</td>
-            <td>Ajay</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8035</td>
-            <td>MJS | Radio button format issue</td>
-            <td>Ajmal Dhahsin K</td>
-            <td>Merclin A</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-7464</td>
-            <td>Constructing simple reports queries in elastic</td>
-            <td>Pradhesh Kumar R</td>
-            <td>Pradhesh Kumar R</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-3417</td>
-            <td>Contextual locking of submission form at acceptance resubmission with ability to replace manuscript without overwriting form metadata</td>
-            <td>Prince Daniel</td>
-            <td>Nitya S</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-3370</td>
-            <td>Testing results, all system Logs Monitoring , API performance and healthcheck monitoring in ELK or Grafana</td>
-            <td>Tharun</td>
-            <td>Tharun</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-1089</td>
-            <td>Editor as an author / reviewer and CoI firewalling </td>
-            <td>balaji a</td>
-            <td>balaji a</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-1096</td>
-            <td>Handling of multiple saved drafts </td>
-            <td>Prince Daniel</td>
-            <td>Akash selvin J</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-1002</td>
-            <td>L3 | When adding a new reviewer, their name is getting duplicated and shown multiple times</td>
-            <td>Sreenaath V</td>
-            <td>Nitya S</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-5393</td>
-            <td>eLife - AHF testing Feedback points</td>
-            <td>Akash Raman</td>
-            <td>Akash Raman</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-1175</td>
-            <td>Ability for editor to remove a reviewer from the shortlisted reviewer list</td>
-            <td>Maurus Maria Rubenson A</td>
-            <td>Maurus Maria Rubenson A</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-840</td>
-            <td>Continuous Pagination with "Run-On" Articles </td>
-            <td>Tharun</td>
-            <td>Tharun</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-2175</td>
-            <td>JAFF | Portugese translation - Peer review</td>
-            <td>balaji a</td>
-            <td>balaji a</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-5276</td>
-            <td>BMJ | Package creator | Analyse convert XSLT that uses 2.0 to use 1.0 using XSLTProc and remove node-xslt-java-bridge dependency</td>
-            <td>Praveenkumar A</td>
-            <td>Praveenkumar A</td>
-            <td class="SlipOver">SlipOver</td>
-          </tr>
-          
-        </tbody>
-      </table>
-    </details>
-  
-    <details >
-      <summary>⚠️ High Risk Items</summary>
-      <table>
-        <thead>
-          <tr>
-            <th>Ticket</th>
-            <th>Summary</th>
-            <th>Dev</th>
-            <th>Assignee</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          
-          <tr>
-            <td>KRIYAEP-9413</td>
-            <td>CLONE - JMIR| "JMIRx Med" option is missing in "Edit Section"</td>
-            <td>Santhosh</td>
-            <td>Santhosh</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9412</td>
-            <td>CLONE - Displaying updated word count and reference and page counts in the sign-off email at Copyediting Triage</td>
-            <td>Rahul RR</td>
-            <td>Akash selvin J</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9381</td>
-            <td>Locking of fields in the submission page for SEG customer</td>
-            <td></td>
-            <td>Merclin A</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9364</td>
-            <td>Save failure - reported via email</td>
-            <td>Santhosh</td>
-            <td>Vassantha Sundar</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9355</td>
-            <td>RCGB|Copyright statement in sub articles</td>
-            <td>Harini Padma M</td>
-            <td>Harini Padma M</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9349</td>
-            <td>BMJ - Double spacing before surnames in Proof of TypesetterCheck articles</td>
-            <td>Akash Raman</td>
-            <td>Akash Raman</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9344</td>
-            <td>Log content saving failure and display in a dashboard</td>
-            <td>Rahul RR</td>
-            <td>Rahul RR</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9339</td>
-            <td>Proofing - Update testcases for bmj customer in proofdatasetter service</td>
-            <td>Akash Raman</td>
-            <td>Akash Raman</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9307</td>
-            <td>L3 | PPlBIO | Unable to invite the Associate editor. - bio_2025_128 bio_2025_131 bio_2025_135, bio_2025_136</td>
-            <td>Lochana P</td>
-            <td>Lochana P</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9274</td>
-            <td>L3 | GSW | SE Notification Not Triggered After Completion of Two Reviews – lithosphere_2025_134</td>
-            <td>Ajmal Dhahsin K</td>
-            <td>Lochana P</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9166</td>
-            <td>Sign in with a Kriyadocs account </td>
-            <td>Arvindh kumar K</td>
-            <td>Arvindh kumar K</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9035</td>
-            <td>Enable LQC for Author Query</td>
-            <td>Kavitha Priyadharshni</td>
-            <td>Kavitha Priyadharshni</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8944</td>
-            <td>Display Author Suffix Field in Reference Editor</td>
-            <td>Pravesh MS</td>
-            <td>Pravesh MS</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8928</td>
-            <td>Option to Retain Edits for Titles in Reference Editor</td>
-            <td>Pravesh MS</td>
-            <td>Pravesh MS</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8885</td>
-            <td>L3 | The associate editor decision is missing in the review history section - lithosphere_2025_115, lithosphere_2025_138, Lithosphere_2024_172</td>
-            <td>Arvindh kumar K</td>
-            <td>Arvindh kumar K</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8862</td>
-            <td>Integrate XSD Module for XML Validation</td>
-            <td>Praveenkumar A</td>
-            <td>Praveenkumar A</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8859</td>
-            <td>SEG  researcher dashboard issues</td>
-            <td>Shilpa Veronica</td>
-            <td>Shilpa Veronica</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8650</td>
-            <td>Manual/automated rejection for transfer offers without response</td>
-            <td>Maurus Maria Rubenson A</td>
-            <td>Maurus Maria Rubenson A</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8557</td>
-            <td>Bibman reference Validation</td>
-            <td>Srirangan K</td>
-            <td>Vignesh</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8541</td>
-            <td> Ensure Hidden Fields Are Not Submitted or Validated </td>
-            <td>Chandru R</td>
-            <td>Prince Daniel</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8540</td>
-            <td>Enforce Conditional Validation Rules on a Field </td>
-            <td>Chandru R</td>
-            <td>Prince Daniel</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8504</td>
-            <td>Validate Existing Author Invitations Before Sending New Invite </td>
-            <td>Arvindh kumar K</td>
-            <td>ArunRam</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8492</td>
-            <td>Indicate Contextual Inline Comments in Decision Emails</td>
-            <td>balaji a</td>
-            <td>balaji a</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8485</td>
-            <td>Auto-Validate Uploaded Figure Image Resolution</td>
-            <td>Krithika S</td>
-            <td>ArunRam</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8406</td>
-            <td>RCGP - Incorrect structure of Reference with bold brackets in Proofing</td>
-            <td>Akash Raman</td>
-            <td>Akash Raman</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8320</td>
-            <td>Generate and Store Multiple Cover Image Versions from Single Upload</td>
-            <td>Tharun</td>
-            <td>Nagendran N</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8234</td>
-            <td>Accuracy improvement in References</td>
-            <td>Srirangan K</td>
-            <td>Srirangan K</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8196</td>
-            <td>Reporting</td>
-            <td>Srirangan K</td>
-            <td>Srirangan K</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-3417</td>
-            <td>Contextual locking of submission form at acceptance resubmission with ability to replace manuscript without overwriting form metadata</td>
-            <td>Prince Daniel</td>
-            <td>Nitya S</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-1089</td>
-            <td>Editor as an author / reviewer and CoI firewalling </td>
-            <td>balaji a</td>
-            <td>balaji a</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-1002</td>
-            <td>L3 | When adding a new reviewer, their name is getting duplicated and shown multiple times</td>
-            <td>Sreenaath V</td>
-            <td>Nitya S</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-5393</td>
-            <td>eLife - AHF testing Feedback points</td>
-            <td>Akash Raman</td>
-            <td>Akash Raman</td>
-            <td class="HighRisk">HighRisk</td>
-          </tr>
-          
-        </tbody>
-      </table>
-    </details>
-  
-    <details >
-      <summary>📅 Planned Next Week</summary>
-      <table>
-        <thead>
-          <tr>
-            <th>Ticket</th>
-            <th>Summary</th>
-            <th>Dev</th>
-            <th>Assignee</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          
-          <tr>
-            <td>KRIYAEP-9484</td>
-            <td>journal name "JNIS" are not searchable using old name "Neurintsurg" in Issue Binder article bank</td>
-            <td>Tharun</td>
-            <td>Tharun</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9483</td>
-            <td>CLONE - ASM | Reword Ringgold Auto Query Message for Affiliation Location Update</td>
-            <td>Sreenaath V</td>
-            <td>Sreenaath V</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9480</td>
-            <td>Configuration needs to be turned off for automatic blinding</td>
-            <td>Ajmal Dhahsin K</td>
-            <td>Ajmal Dhahsin K</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9479</td>
-            <td>Email templates to be changed for JGSI</td>
-            <td></td>
-            <td>Nitya S</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9455</td>
-            <td>Fixing errors logged in Kriya</td>
-            <td>Shiva Sharvesh</td>
-            <td>Shiva Sharvesh</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9450</td>
-            <td>LQC| JMIR : LQC Fails to Load Initially in Copyediting QC Stage</td>
-            <td>Kavitha Priyadharshni</td>
-            <td>Selvakumar</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9403</td>
-            <td>CLONE - ASM| Issue ProcCUR - Disappeared Author Byline and Affiliation Section Heading on First Page of Proof – Urgent action required</td>
-            <td>Hemamalini</td>
-            <td>Hemamalini</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9336</td>
-            <td>Integrate K-Tagger into Kriyadocs itself</td>
-            <td>Chandru R</td>
-            <td>Chandru R</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9323</td>
-            <td>PPL | Clarification Required on Author Name Display and Suggested Title in Notification Email</td>
-            <td>Arvindh kumar K</td>
-            <td>Arvindh kumar K</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9231</td>
-            <td>Update node version for Proofdatasetter </td>
-            <td>Lekha Shree</td>
-            <td>Lekha Shree</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9224</td>
-            <td>SEG | Sign off Bugs </td>
-            <td></td>
-            <td>balaji a</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9179</td>
-            <td>Validate Incompatible File Types for Tags</td>
-            <td>Chandru R</td>
-            <td>Chandru R</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9178</td>
-            <td>Inline Validations for File Integrity</td>
-            <td>Chandru R</td>
-            <td>Chandru R</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-9169</td>
-            <td>Sign up for a Kriyadocs account </td>
-            <td></td>
-            <td>balaji a</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8620</td>
-            <td>JAFF - Figure label | issue</td>
-            <td></td>
-            <td>Saravanan V</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-8149</td>
-            <td>Mechanism to correct the shortfall by pushing content from the next page</td>
-            <td>Ramnath K</td>
-            <td>Ramnath K</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-1317</td>
-            <td>TLE - Figure caption casing issue </td>
-            <td>Aarthi R</td>
-            <td>Saravanan V</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-6672</td>
-            <td>Editors should be able to reorder backup reviewers to control backup reviewer assignment sequence</td>
-            <td>Arvindh kumar K</td>
-            <td>Maurus Maria Rubenson A</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-6917</td>
-            <td>ML/AI integration for suggestion of journals, keywords and sections</td>
-            <td></td>
-            <td>Vidya Vijayabhanu</td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-          <tr>
-            <td>KRIYAEP-7264</td>
-            <td>Fix display logic and filtering for 'Days in Review' and 'Days in Production'</td>
-            <td></td>
-            <td></td>
-            <td class="Planned">Planned</td>
-          </tr>
-          
-        </tbody>
-      </table>
-    </details>
-  
+<details >
+  <summary>🔁 Slipped (121)</summary>
+  <table>
+    <thead>
+      <tr><th>Ticket</th><th>Summary</th><th>Product Area</th><th>Assignee</th><th>Dev</th><th>QA</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td>KRIYAEP-9498</td>
+        <td>JMIR - Group reference handling </td>
+        <td>Proof</td>
+        <td>Harini Padma M</td>
+        <td>Harini Padma M</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9496</td>
+        <td>Figure Footnote and Table Footnote, Reference validation related to jama demo readiness fixes</td>
+        <td>Pre-Editing & Checks</td>
+        <td>Srirangan K</td>
+        <td>Srirangan K</td>
+        <td>Sajeetha</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9477</td>
+        <td>Show the customer specific dropdown in submission page </td>
+        <td>Submission</td>
+        <td>Harini S</td>
+        <td>Krithika S</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9476</td>
+        <td>Publication time function not working – defaulting all papers to 10 AM EST</td>
+        <td>Editor</td>
+        <td>Santhosh</td>
+        <td>Santhosh</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9474</td>
+        <td>CUR - 60792: associated PQ missing from editor side</td>
+        <td>Unassigned</td>
+        <td>Santhosh</td>
+        <td>Santhosh</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9473</td>
+        <td>CUR- Can we add a ‘Save changes’ prompt to the metadata form</td>
+        <td>Editor</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td>Rahul RR</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9471</td>
+        <td>CUR - Questions regarding table formatting and tracked changes (eg, articles 51310 and 49055)</td>
+        <td>Editor</td>
+        <td>Rahul RR</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9438</td>
+        <td>RS - Export PDF enhancement</td>
+        <td>Proof</td>
+        <td>Sai Avanthika</td>
+        <td>Saravanan V</td>
+        <td>dharshini PK</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9433</td>
+        <td>CUR - Unable to add "see Acknowledgments" as affiliation for group author</td>
+        <td>Unassigned</td>
+        <td>Santhosh</td>
+        <td>Santhosh</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9432</td>
+        <td>CLONE - CUR - SPE | Request to revamp Nomenclature section</td>
+        <td>Unassigned</td>
+        <td>Account Managers</td>
+        <td>Rahul RR</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9424</td>
+        <td>CUR -  Change History Timestamps Incorrectly Advance After Reload</td>
+        <td>Editor</td>
+        <td>Santhosh</td>
+        <td>Santhosh</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9413</td>
+        <td>CLONE - JMIR| "JMIRx Med" option is missing in "Edit Section"</td>
+        <td>Editor</td>
+        <td>Santhosh</td>
+        <td>Santhosh</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9412</td>
+        <td>CLONE - Displaying updated word count and reference and page counts in the sign-off email at Copyediting Triage</td>
+        <td>Editor</td>
+        <td>Akash selvin J</td>
+        <td>Rahul RR</td>
+        <td>dharshini PK</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9411</td>
+        <td>Citations used across sub-articles create ambiguity in reference display</td>
+        <td>Editor</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9401</td>
+        <td>PMC failure issue</td>
+        <td>Editor</td>
+        <td>Saravanan V</td>
+        <td>Saravanan V</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9381</td>
+        <td>Locking of fields in the submission page for SEG customer</td>
+        <td>Configuration</td>
+        <td>Merclin A</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9367</td>
+        <td>Memory usage issue</td>
+        <td>Editor</td>
+        <td>Rahul RR</td>
+        <td>Rahul RR</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9364</td>
+        <td>Save failure - reported via email</td>
+        <td>Editor</td>
+        <td>Akash selvin J</td>
+        <td>Santhosh</td>
+        <td>dharshini PK</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9363</td>
+        <td>CUR - RS | Content saving issue in Author review stage</td>
+        <td>Unassigned</td>
+        <td>Santhosh</td>
+        <td>Santhosh</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9362</td>
+        <td>JAMA demo readiness  - fixing feedback points</td>
+        <td>Pre-Editing & Checks</td>
+        <td>Srirangan K</td>
+        <td>Srirangan K</td>
+        <td>Sajeetha</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9355</td>
+        <td>RCGB|Copyright statement in sub articles</td>
+        <td>Proof</td>
+        <td>Harini Padma M</td>
+        <td>Harini Padma M</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9349</td>
+        <td>BMJ - Double spacing before surnames in Proof of TypesetterCheck articles</td>
+        <td>Proof</td>
+        <td>Akash Raman</td>
+        <td>Akash Raman</td>
+        <td>Abishekkumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9344</td>
+        <td>Log content saving failure and display in a dashboard</td>
+        <td>Editor</td>
+        <td>Rahul RR</td>
+        <td>Rahul RR</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9339</td>
+        <td>Proofing - Update testcases for bmj customer in proofdatasetter service</td>
+        <td>Proof</td>
+        <td>Akash Raman</td>
+        <td>Akash Raman</td>
+        <td>Abishekkumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9314</td>
+        <td>Multirole switching - Unable to access production articles when trying to switch roles</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Shilpa Veronica</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9308</td>
+        <td>L3 | Allow article rejection without mandatory summary for on-hold articles in Medwave</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>Ajmal Dhahsin K</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9307</td>
+        <td>L3 | PPlBIO | Unable to invite the Associate editor. - bio_2025_128 bio_2025_131 bio_2025_135, bio_2025_136</td>
+        <td>Peer Review</td>
+        <td>Lochana P</td>
+        <td>Lochana P</td>
+        <td>Lochana P</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9302</td>
+        <td>Normalize Author and Reviewer Emails to Lowercase after successful Submission</td>
+        <td>Submission</td>
+        <td>RAGHU VISHNU S</td>
+        <td>Chandru R</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9300</td>
+        <td>Ensure consistent email history logging when bulk cancellation of pending reviewer</td>
+        <td>Peer Review</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9285</td>
+        <td>Author Feedback Report</td>
+        <td>Unassigned</td>
+        <td>Pradhesh Kumar R</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9274</td>
+        <td>L3 | GSW | SE Notification Not Triggered After Completion of Two Reviews – lithosphere_2025_134</td>
+        <td>Peer Review</td>
+        <td>Lochana P</td>
+        <td>Ajmal Dhahsin K</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9273</td>
+        <td>configure quick_actions for jmir</td>
+        <td>Dashboard</td>
+        <td>Nitya S</td>
+        <td>Prince Daniel</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9263</td>
+        <td>PPL Researcher dashboard email to address changes for authors</td>
+        <td>Dashboard</td>
+        <td>Akash selvin J</td>
+        <td>Shilpa Veronica</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9257</td>
+        <td>SEG | Word Preferences Not Reflecting Post Configuration – Requires Development Analysis</td>
+        <td>Editor</td>
+        <td>Santhosh</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9241</td>
+        <td>Report Dashboard UI | Discussion and Planning for Integration & Development</td>
+        <td>Final Deliverables</td>
+        <td>Hemamalini</td>
+        <td>Praveenkumar A</td>
+        <td>Nagendran N</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9216</td>
+        <td>handling prefix while structuring link node</td>
+        <td>LaTex Typesetting</td>
+        <td>Ajay</td>
+        <td>Ajay</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9213</td>
+        <td>PPL | Draft decision letter fails to save</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>Ajmal Dhahsin K</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9212</td>
+        <td>Extension of due date before acceptance is not reflecting in any of the emails, landing pages, chasers</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>dharshini PK</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9211</td>
+        <td>PPL | Editing of reviewer details is not working</td>
+        <td>Peer Review</td>
+        <td>Shiva Karthikeyan</td>
+        <td>Ajmal Dhahsin K</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9208</td>
+        <td>Reviewer extension is not working shows up invalid due date</td>
+        <td>Peer Review</td>
+        <td>ArunRam</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>dharshini PK</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9181</td>
+        <td>Final Review and Confirmation</td>
+        <td>Submission</td>
+        <td>Chandru R</td>
+        <td>Chandru R</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9180</td>
+        <td>Show Contextual Notes and Guidelines</td>
+        <td>Submission</td>
+        <td>Chandru R</td>
+        <td>Chandru R</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9177</td>
+        <td>User Review and Interaction with File Tags</td>
+        <td>Submission</td>
+        <td>Chandru R</td>
+        <td>Chandru R</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9176</td>
+        <td>Auto-Detection and Tagging of Files</td>
+        <td>Submission</td>
+        <td>Chandru R</td>
+        <td>Chandru R</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9175</td>
+        <td>Upload Zip, Multiple Files, or Folders</td>
+        <td>Submission</td>
+        <td>Chandru R</td>
+        <td>Chandru R</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9171</td>
+        <td>Sign in with Customer SSO </td>
+        <td>User Management</td>
+        <td>balaji a</td>
+        <td>balaji a</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9166</td>
+        <td>Sign in with a Kriyadocs account </td>
+        <td>User Management</td>
+        <td>Arvindh kumar K</td>
+        <td>Arvindh kumar K</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9164</td>
+        <td>User signs in with ORCID  </td>
+        <td>User Management</td>
+        <td>balaji a</td>
+        <td>balaji a</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9157</td>
+        <td>PDS adding functionParams in components config</td>
+        <td>LaTex Typesetting</td>
+        <td>Ajay</td>
+        <td>Ajay</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9152</td>
+        <td>Researcher dashboard issues</td>
+        <td>Peer Review</td>
+        <td>Shilpa Veronica</td>
+        <td>Shilpa Veronica</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9138</td>
+        <td>Files doesn't show up in editor page after author revision</td>
+        <td>Peer Review</td>
+        <td>Chandru R</td>
+        <td>Chandru R</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9124</td>
+        <td>Document what is done in current Pretransformation process</td>
+        <td>Final Deliverables</td>
+        <td>Nagendran N</td>
+        <td>Hemamalini</td>
+        <td>Nagendran N</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9103</td>
+        <td>CRediT metadata stored in the XML</td>
+        <td>Submission</td>
+        <td>Krithika S</td>
+        <td>Krithika S</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9101</td>
+        <td>Author is mandated to add CRediT for Group authors as well</td>
+        <td>Submission</td>
+        <td>Krithika S</td>
+        <td>Krithika S</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9099</td>
+        <td>Author is mandated to select at least one writing/reviewing role</td>
+        <td>Submission</td>
+        <td>Krithika S</td>
+        <td>Krithika S</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9098</td>
+        <td>Author is able to select contributor roles for all coauthors as per CRediT taxonomy </td>
+        <td>Submission</td>
+        <td>Krithika S</td>
+        <td>Krithika S</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9067</td>
+        <td>Enable name and email copy functionality in reviewer history</td>
+        <td>Peer Review</td>
+        <td>Arvindh kumar K</td>
+        <td>Arvindh kumar K</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9039</td>
+        <td>CLONE - Take Home Message spacing</td>
+        <td>Proof</td>
+        <td>Lekha Shree</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9038</td>
+        <td>CLONE - Articles with no "Cite this article" text</td>
+        <td>Proof</td>
+        <td>Lekha Shree</td>
+        <td>Lekha Shree</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9035</td>
+        <td>Enable LQC for Author Query</td>
+        <td>LQC</td>
+        <td>Kavitha Priyadharshni</td>
+        <td>Kavitha Priyadharshni</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8995</td>
+        <td>CLONE - Non-blocking warning message for unresolved production notes during sign-off</td>
+        <td>Unassigned</td>
+        <td>Santhosh</td>
+        <td>Santhosh</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8978</td>
+        <td>UX improvements in Reviewer assignment widget</td>
+        <td>Peer Review</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8961</td>
+        <td>Transfer UI view is not linked to the "Open manuscript" button when author dashboard</td>
+        <td>Peer Review</td>
+        <td>ArunRam</td>
+        <td>Shilpa Veronica</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8944</td>
+        <td>Display Author Suffix Field in Reference Editor</td>
+        <td>References</td>
+        <td>Pravesh MS</td>
+        <td>Pravesh MS</td>
+        <td>Vignesh</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8940</td>
+        <td>Indicate and Prioritize Mandatory Fields in Reference Editor When Changing Reference Type</td>
+        <td>References</td>
+        <td>Pravesh MS</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8928</td>
+        <td>Option to Retain Edits for Titles in Reference Editor</td>
+        <td>References</td>
+        <td>Pravesh MS</td>
+        <td>Pravesh MS</td>
+        <td>Vignesh</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8925</td>
+        <td>Display Original and Updated Reference Side-by-Side in Reference Editor</td>
+        <td>References</td>
+        <td>Pravesh MS</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8912</td>
+        <td>Display Last Follow-up Details in Invite & Track Widget</td>
+        <td>Peer Review</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Abishekkumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8904</td>
+        <td>CLONE - ASN|Request to enable ALT Text and Long desc. in Editor and InDesign package</td>
+        <td>Proof</td>
+        <td>Akash Raman</td>
+        <td>Akash Raman</td>
+        <td>dharshini PK</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8885</td>
+        <td>L3 | The associate editor decision is missing in the review history section - lithosphere_2025_115, lithosphere_2025_138, Lithosphere_2024_172</td>
+        <td>Peer Review</td>
+        <td>dharshini PK</td>
+        <td>Arvindh kumar K</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8859</td>
+        <td>SEG  researcher dashboard issues</td>
+        <td>Peer Review</td>
+        <td>Pooja J</td>
+        <td>Shilpa Veronica</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8835</td>
+        <td>PPL | Chaser use case for reassignment of editors from the flyout</td>
+        <td>Peer Review</td>
+        <td>Shiva Karthikeyan</td>
+        <td>Shiva Sharvesh</td>
+        <td>Abishekkumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8816</td>
+        <td>Error logging for all the errors thrown</td>
+        <td>LaTex Typesetting</td>
+        <td>Ajay</td>
+        <td>Ajay</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8804</td>
+        <td>Migration of Peer Review Master Report to Elastic Query</td>
+        <td>Reports</td>
+        <td>Pradhesh Kumar R</td>
+        <td>Pradhesh Kumar R</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8740</td>
+        <td>Proof Failure Analyzation</td>
+        <td>LaTex Typesetting</td>
+        <td>Ajay</td>
+        <td>Ajay</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8725</td>
+        <td>Latex Log Parser</td>
+        <td>LaTex Typesetting</td>
+        <td>Ajay</td>
+        <td>Ajay</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8665</td>
+        <td>Configurable minimum review count with dynamic adjustment & manuscript workflow automation</td>
+        <td>Dashboard</td>
+        <td>Jaishankar</td>
+        <td>Shilpa Veronica</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8650</td>
+        <td>Manual/automated rejection for transfer offers without response</td>
+        <td>Peer Review</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8557</td>
+        <td>Bibman reference Validation</td>
+        <td>References</td>
+        <td>Vignesh</td>
+        <td>Srirangan K</td>
+        <td>Vignesh</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8541</td>
+        <td> Ensure Hidden Fields Are Not Submitted or Validated </td>
+        <td>Submission</td>
+        <td>Prince Daniel</td>
+        <td>Chandru R</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8540</td>
+        <td>Enforce Conditional Validation Rules on a Field </td>
+        <td>Submission</td>
+        <td>Prince Daniel</td>
+        <td>Chandru R</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8539</td>
+        <td>Show or Hide a Field Based on Another Field’s Value </td>
+        <td>Submission</td>
+        <td>Prince Daniel</td>
+        <td>Chandru R</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8532</td>
+        <td>Audit trail coverage</td>
+        <td>Peer Review</td>
+        <td>ArunRam</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8504</td>
+        <td>Validate Existing Author Invitations Before Sending New Invite </td>
+        <td>Submission</td>
+        <td>ArunRam</td>
+        <td>Arvindh kumar K</td>
+        <td>dharshini PK</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8485</td>
+        <td>Auto-Validate Uploaded Figure Image Resolution</td>
+        <td>Submission</td>
+        <td>Akash selvin J</td>
+        <td>Krithika S</td>
+        <td>dharshini PK</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8411</td>
+        <td>PPL | Download supplementary files doesn't work</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8410</td>
+        <td>PPL | Confirmation email gets duplicated</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>balaji a</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8406</td>
+        <td>RCGP - Incorrect structure of Reference with bold brackets in Proofing</td>
+        <td>Proof</td>
+        <td>Akash Raman</td>
+        <td>Akash Raman</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8385</td>
+        <td>Workflow stages checklist - When sign off to "Author revision" in (Editorial office decision) - Wrongly went to Editorial office decision stage after author revision</td>
+        <td>Unassigned</td>
+        <td>Deivanai</td>
+        <td>Merclin A</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8367</td>
+        <td>PPL | Extra files got during author revision gets dropped</td>
+        <td>Submission</td>
+        <td>Akash selvin J</td>
+        <td>Krithika S</td>
+        <td>dharshini PK</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8320</td>
+        <td>Generate and Store Multiple Cover Image Versions from Single Upload</td>
+        <td>Editor</td>
+        <td>dharshini PK</td>
+        <td>Tharun</td>
+        <td>dharshini PK</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8234</td>
+        <td>Accuracy improvement in References</td>
+        <td>References</td>
+        <td>Srirangan K</td>
+        <td>Srirangan K</td>
+        <td>Abishekkumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8196</td>
+        <td>Reporting</td>
+        <td>References</td>
+        <td>Srirangan K</td>
+        <td>Srirangan K</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8160</td>
+        <td>Template spec for RSOS</td>
+        <td>Proof</td>
+        <td>Ajay</td>
+        <td>Ajay</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8058</td>
+        <td>L3 | Although the AE/EIC is not involved in the review process, the email signature incorrectly indicates that the article was moved to Author Revision by the AE.</td>
+        <td>Peer Review</td>
+        <td>Ajmal Dhahsin K</td>
+        <td>balaji a</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8035</td>
+        <td>MJS | Radio button format issue</td>
+        <td>Configuration</td>
+        <td>Merclin A</td>
+        <td>Ajmal Dhahsin K</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-7891</td>
+        <td>Automated Image DPI Conversion for PDFs</td>
+        <td>Issue Binder</td>
+        <td>Tharun</td>
+        <td>Tharun</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-7771</td>
+        <td>Resolve issues faced in the conversion process of edp science articles</td>
+        <td>Pre-Editing & Checks</td>
+        <td>Pushpalatha D</td>
+        <td>Rahul RR</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-7464</td>
+        <td>Constructing simple reports queries in elastic</td>
+        <td>Pre-Editing & Checks</td>
+        <td>Pradhesh Kumar R</td>
+        <td>Pradhesh Kumar R</td>
+        <td>Sundar Raman</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-3417</td>
+        <td>Contextual locking of submission form at acceptance resubmission with ability to replace manuscript without overwriting form metadata</td>
+        <td>Submission</td>
+        <td>Nitya S</td>
+        <td>Prince Daniel</td>
+        <td>dharshini PK</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-3370</td>
+        <td>Testing results, all system Logs Monitoring , API performance and healthcheck monitoring in ELK or Grafana</td>
+        <td>Functional</td>
+        <td>Tharun</td>
+        <td>Tharun</td>
+        <td>dharshini PK</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1465</td>
+        <td>Kriya xml schema validation</td>
+        <td>Platform</td>
+        <td>Hemamalini</td>
+        <td>Unassigned</td>
+        <td>Hemamalini</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1384</td>
+        <td>PPL | Critical bugs</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>balaji a</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1377</td>
+        <td>Multimedia File Missing from Form Details Despite Being Present in Inputs</td>
+        <td>Peer Review</td>
+        <td>Vidya Vijayabhanu</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1376</td>
+        <td>PPL | Not able to view reviewers beyond 1000 row items</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>Arvindh kumar K</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1168</td>
+        <td>L3 | Authors are unable to access the articles called from the stub</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1163</td>
+        <td>Review completed but recommendation not being updated (Editor not able to sign off)</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>Arvindh kumar K</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1152</td>
+        <td>Inability to change due dates for Invitation Stubs on Kriyadocs native submissions despite previous functionality</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1089</td>
+        <td>Editor as an author / reviewer and CoI firewalling </td>
+        <td>Peer Review</td>
+        <td>balaji a</td>
+        <td>balaji a</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1096</td>
+        <td>Handling of multiple saved drafts </td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>Prince Daniel</td>
+        <td>Harini S</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-566</td>
+        <td>Implement Copublication Workflow</td>
+        <td>Checker</td>
+        <td>Vassantha Sundar</td>
+        <td>Saravanan V</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-5308</td>
+        <td>LQC| Display selected "Language variant"</td>
+        <td>LQC</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-5393</td>
+        <td>eLife - AHF testing Feedback points</td>
+        <td>Proof</td>
+        <td>Akash Raman</td>
+        <td>Akash Raman</td>
+        <td>Abishekkumar</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-701</td>
+        <td>RS | Issue binder updates</td>
+        <td>Issue Binder</td>
+        <td>Tharun</td>
+        <td>Tharun</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-6652</td>
+        <td>THL | Membership fee</td>
+        <td>Peer Review</td>
+        <td>balaji a</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-7459</td>
+        <td>SSO functionality</td>
+        <td>Peer Review</td>
+        <td>RAGHU VISHNU S</td>
+        <td>Chandru R</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1175</td>
+        <td>Ability for editor to remove a reviewer from the shortlisted reviewer list</td>
+        <td>Peer Review</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Pooja J</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-840</td>
+        <td>Continuous Pagination with "Run-On" Articles </td>
+        <td>Issue Binder</td>
+        <td>dharshini PK</td>
+        <td>Tharun</td>
+        <td>dharshini PK</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-2175</td>
+        <td>JAFF | Portugese translation - Peer review</td>
+        <td>Configuration</td>
+        <td>balaji a</td>
+        <td>balaji a</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-6160</td>
+        <td>Unable to invite author/reviewer-suggested reviewers — "Invite Now" triggers reload without action</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-5276</td>
+        <td>BMJ | Package creator | Analyse convert XSLT that uses 2.0 to use 1.0 using XSLTProc and remove node-xslt-java-bridge dependency</td>
+        <td>Final Deliverables</td>
+        <td>Praveenkumar A</td>
+        <td>Praveenkumar A</td>
+        <td>Nagendran N</td>
+        <td class="Slipped">Slipped</td>
+      </tr>
+      
+    </tbody>
+  </table>
+</details>
 
-  <footer>Generated by Kriyadocs Weekly Report Automation | Fix Version: 20250718</footer>
+<details >
+  <summary>⚠️ High Risk (41)</summary>
+  <table>
+    <thead>
+      <tr><th>Ticket</th><th>Summary</th><th>Product Area</th><th>Assignee</th><th>Dev</th><th>QA</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td>KRIYAEP-9498</td>
+        <td>JMIR - Group reference handling </td>
+        <td>Proof</td>
+        <td>Harini Padma M</td>
+        <td>Harini Padma M</td>
+        <td>Unassigned</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9477</td>
+        <td>Show the customer specific dropdown in submission page </td>
+        <td>Submission</td>
+        <td>Harini S</td>
+        <td>Krithika S</td>
+        <td>Pooja J</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9413</td>
+        <td>CLONE - JMIR| "JMIRx Med" option is missing in "Edit Section"</td>
+        <td>Editor</td>
+        <td>Santhosh</td>
+        <td>Santhosh</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9412</td>
+        <td>CLONE - Displaying updated word count and reference and page counts in the sign-off email at Copyediting Triage</td>
+        <td>Editor</td>
+        <td>Akash selvin J</td>
+        <td>Rahul RR</td>
+        <td>dharshini PK</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9381</td>
+        <td>Locking of fields in the submission page for SEG customer</td>
+        <td>Configuration</td>
+        <td>Merclin A</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9364</td>
+        <td>Save failure - reported via email</td>
+        <td>Editor</td>
+        <td>Akash selvin J</td>
+        <td>Santhosh</td>
+        <td>dharshini PK</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9355</td>
+        <td>RCGB|Copyright statement in sub articles</td>
+        <td>Proof</td>
+        <td>Harini Padma M</td>
+        <td>Harini Padma M</td>
+        <td>Unassigned</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9349</td>
+        <td>BMJ - Double spacing before surnames in Proof of TypesetterCheck articles</td>
+        <td>Proof</td>
+        <td>Akash Raman</td>
+        <td>Akash Raman</td>
+        <td>Abishekkumar</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9344</td>
+        <td>Log content saving failure and display in a dashboard</td>
+        <td>Editor</td>
+        <td>Rahul RR</td>
+        <td>Rahul RR</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9339</td>
+        <td>Proofing - Update testcases for bmj customer in proofdatasetter service</td>
+        <td>Proof</td>
+        <td>Akash Raman</td>
+        <td>Akash Raman</td>
+        <td>Abishekkumar</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9308</td>
+        <td>L3 | Allow article rejection without mandatory summary for on-hold articles in Medwave</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>Ajmal Dhahsin K</td>
+        <td>Harini S</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9307</td>
+        <td>L3 | PPlBIO | Unable to invite the Associate editor. - bio_2025_128 bio_2025_131 bio_2025_135, bio_2025_136</td>
+        <td>Peer Review</td>
+        <td>Lochana P</td>
+        <td>Lochana P</td>
+        <td>Lochana P</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9274</td>
+        <td>L3 | GSW | SE Notification Not Triggered After Completion of Two Reviews – lithosphere_2025_134</td>
+        <td>Peer Review</td>
+        <td>Lochana P</td>
+        <td>Ajmal Dhahsin K</td>
+        <td>Pooja J</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9166</td>
+        <td>Sign in with a Kriyadocs account </td>
+        <td>User Management</td>
+        <td>Arvindh kumar K</td>
+        <td>Arvindh kumar K</td>
+        <td>Harini S</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9035</td>
+        <td>Enable LQC for Author Query</td>
+        <td>LQC</td>
+        <td>Kavitha Priyadharshni</td>
+        <td>Kavitha Priyadharshni</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8978</td>
+        <td>UX improvements in Reviewer assignment widget</td>
+        <td>Peer Review</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Harini S</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8944</td>
+        <td>Display Author Suffix Field in Reference Editor</td>
+        <td>References</td>
+        <td>Pravesh MS</td>
+        <td>Pravesh MS</td>
+        <td>Vignesh</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8928</td>
+        <td>Option to Retain Edits for Titles in Reference Editor</td>
+        <td>References</td>
+        <td>Pravesh MS</td>
+        <td>Pravesh MS</td>
+        <td>Vignesh</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8885</td>
+        <td>L3 | The associate editor decision is missing in the review history section - lithosphere_2025_115, lithosphere_2025_138, Lithosphere_2024_172</td>
+        <td>Peer Review</td>
+        <td>dharshini PK</td>
+        <td>Arvindh kumar K</td>
+        <td>Harini S</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8859</td>
+        <td>SEG  researcher dashboard issues</td>
+        <td>Peer Review</td>
+        <td>Pooja J</td>
+        <td>Shilpa Veronica</td>
+        <td>Harini S</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8650</td>
+        <td>Manual/automated rejection for transfer offers without response</td>
+        <td>Peer Review</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Harini S</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8557</td>
+        <td>Bibman reference Validation</td>
+        <td>References</td>
+        <td>Vignesh</td>
+        <td>Srirangan K</td>
+        <td>Vignesh</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8541</td>
+        <td> Ensure Hidden Fields Are Not Submitted or Validated </td>
+        <td>Submission</td>
+        <td>Prince Daniel</td>
+        <td>Chandru R</td>
+        <td>Pooja J</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8540</td>
+        <td>Enforce Conditional Validation Rules on a Field </td>
+        <td>Submission</td>
+        <td>Prince Daniel</td>
+        <td>Chandru R</td>
+        <td>Pooja J</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8504</td>
+        <td>Validate Existing Author Invitations Before Sending New Invite </td>
+        <td>Submission</td>
+        <td>ArunRam</td>
+        <td>Arvindh kumar K</td>
+        <td>dharshini PK</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8485</td>
+        <td>Auto-Validate Uploaded Figure Image Resolution</td>
+        <td>Submission</td>
+        <td>Akash selvin J</td>
+        <td>Krithika S</td>
+        <td>dharshini PK</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8411</td>
+        <td>PPL | Download supplementary files doesn't work</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Pooja J</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8410</td>
+        <td>PPL | Confirmation email gets duplicated</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>balaji a</td>
+        <td>Harini S</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8406</td>
+        <td>RCGP - Incorrect structure of Reference with bold brackets in Proofing</td>
+        <td>Proof</td>
+        <td>Akash Raman</td>
+        <td>Akash Raman</td>
+        <td>Unassigned</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8367</td>
+        <td>PPL | Extra files got during author revision gets dropped</td>
+        <td>Submission</td>
+        <td>Akash selvin J</td>
+        <td>Krithika S</td>
+        <td>dharshini PK</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8320</td>
+        <td>Generate and Store Multiple Cover Image Versions from Single Upload</td>
+        <td>Editor</td>
+        <td>dharshini PK</td>
+        <td>Tharun</td>
+        <td>dharshini PK</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8234</td>
+        <td>Accuracy improvement in References</td>
+        <td>References</td>
+        <td>Srirangan K</td>
+        <td>Srirangan K</td>
+        <td>Abishekkumar</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8196</td>
+        <td>Reporting</td>
+        <td>References</td>
+        <td>Srirangan K</td>
+        <td>Srirangan K</td>
+        <td>Unassigned</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-3417</td>
+        <td>Contextual locking of submission form at acceptance resubmission with ability to replace manuscript without overwriting form metadata</td>
+        <td>Submission</td>
+        <td>Nitya S</td>
+        <td>Prince Daniel</td>
+        <td>dharshini PK</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1384</td>
+        <td>PPL | Critical bugs</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>balaji a</td>
+        <td>Pooja J</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1376</td>
+        <td>PPL | Not able to view reviewers beyond 1000 row items</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>Arvindh kumar K</td>
+        <td>Unassigned</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1168</td>
+        <td>L3 | Authors are unable to access the articles called from the stub</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Unassigned</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1163</td>
+        <td>Review completed but recommendation not being updated (Editor not able to sign off)</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>Arvindh kumar K</td>
+        <td>Unassigned</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1152</td>
+        <td>Inability to change due dates for Invitation Stubs on Kriyadocs native submissions despite previous functionality</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Unassigned</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1089</td>
+        <td>Editor as an author / reviewer and CoI firewalling </td>
+        <td>Peer Review</td>
+        <td>balaji a</td>
+        <td>balaji a</td>
+        <td>Unassigned</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-5393</td>
+        <td>eLife - AHF testing Feedback points</td>
+        <td>Proof</td>
+        <td>Akash Raman</td>
+        <td>Akash Raman</td>
+        <td>Abishekkumar</td>
+        <td class="Risk">Risk</td>
+      </tr>
+      
+    </tbody>
+  </table>
+</details>
+
+<details >
+  <summary>🕒 Delayed (92)</summary>
+  <table>
+    <thead>
+      <tr><th>Ticket</th><th>Summary</th><th>Product Area</th><th>Assignee</th><th>Dev</th><th>QA</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td>KRIYAEP-9516</td>
+        <td>RSBM|Micron symbol Styling</td>
+        <td>Proof</td>
+        <td>Harini Padma M</td>
+        <td>Harini Padma M</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9498</td>
+        <td>JMIR - Group reference handling </td>
+        <td>Proof</td>
+        <td>Harini Padma M</td>
+        <td>Harini Padma M</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9496</td>
+        <td>Figure Footnote and Table Footnote, Reference validation related to jama demo readiness fixes</td>
+        <td>Pre-Editing & Checks</td>
+        <td>Srirangan K</td>
+        <td>Srirangan K</td>
+        <td>Sajeetha</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9481</td>
+        <td>L3 | JGSI | The AE is unable to make decision.</td>
+        <td>Peer Review</td>
+        <td>Lochana P</td>
+        <td>Ajmal Dhahsin K</td>
+        <td>Harini S</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9477</td>
+        <td>Show the customer specific dropdown in submission page </td>
+        <td>Submission</td>
+        <td>Harini S</td>
+        <td>Krithika S</td>
+        <td>Pooja J</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9476</td>
+        <td>Publication time function not working – defaulting all papers to 10 AM EST</td>
+        <td>Editor</td>
+        <td>Santhosh</td>
+        <td>Santhosh</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9438</td>
+        <td>RS - Export PDF enhancement</td>
+        <td>Proof</td>
+        <td>Sai Avanthika</td>
+        <td>Saravanan V</td>
+        <td>dharshini PK</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9413</td>
+        <td>CLONE - JMIR| "JMIRx Med" option is missing in "Edit Section"</td>
+        <td>Editor</td>
+        <td>Santhosh</td>
+        <td>Santhosh</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9412</td>
+        <td>CLONE - Displaying updated word count and reference and page counts in the sign-off email at Copyediting Triage</td>
+        <td>Editor</td>
+        <td>Akash selvin J</td>
+        <td>Rahul RR</td>
+        <td>dharshini PK</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9401</td>
+        <td>PMC failure issue</td>
+        <td>Editor</td>
+        <td>Saravanan V</td>
+        <td>Saravanan V</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9381</td>
+        <td>Locking of fields in the submission page for SEG customer</td>
+        <td>Configuration</td>
+        <td>Merclin A</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9367</td>
+        <td>Memory usage issue</td>
+        <td>Editor</td>
+        <td>Rahul RR</td>
+        <td>Rahul RR</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9364</td>
+        <td>Save failure - reported via email</td>
+        <td>Editor</td>
+        <td>Akash selvin J</td>
+        <td>Santhosh</td>
+        <td>dharshini PK</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9363</td>
+        <td>CUR - RS | Content saving issue in Author review stage</td>
+        <td>Unassigned</td>
+        <td>Santhosh</td>
+        <td>Santhosh</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9362</td>
+        <td>JAMA demo readiness  - fixing feedback points</td>
+        <td>Pre-Editing & Checks</td>
+        <td>Srirangan K</td>
+        <td>Srirangan K</td>
+        <td>Sajeetha</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9355</td>
+        <td>RCGB|Copyright statement in sub articles</td>
+        <td>Proof</td>
+        <td>Harini Padma M</td>
+        <td>Harini Padma M</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9349</td>
+        <td>BMJ - Double spacing before surnames in Proof of TypesetterCheck articles</td>
+        <td>Proof</td>
+        <td>Akash Raman</td>
+        <td>Akash Raman</td>
+        <td>Abishekkumar</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9344</td>
+        <td>Log content saving failure and display in a dashboard</td>
+        <td>Editor</td>
+        <td>Rahul RR</td>
+        <td>Rahul RR</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9339</td>
+        <td>Proofing - Update testcases for bmj customer in proofdatasetter service</td>
+        <td>Proof</td>
+        <td>Akash Raman</td>
+        <td>Akash Raman</td>
+        <td>Abishekkumar</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9336</td>
+        <td>Integrate K-Tagger into Kriyadocs itself</td>
+        <td>Submission</td>
+        <td>Chandru R</td>
+        <td>Chandru R</td>
+        <td>Pooja J</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9314</td>
+        <td>Multirole switching - Unable to access production articles when trying to switch roles</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Shilpa Veronica</td>
+        <td>Harini S</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9308</td>
+        <td>L3 | Allow article rejection without mandatory summary for on-hold articles in Medwave</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>Ajmal Dhahsin K</td>
+        <td>Harini S</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9307</td>
+        <td>L3 | PPlBIO | Unable to invite the Associate editor. - bio_2025_128 bio_2025_131 bio_2025_135, bio_2025_136</td>
+        <td>Peer Review</td>
+        <td>Lochana P</td>
+        <td>Lochana P</td>
+        <td>Lochana P</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9302</td>
+        <td>Normalize Author and Reviewer Emails to Lowercase after successful Submission</td>
+        <td>Submission</td>
+        <td>RAGHU VISHNU S</td>
+        <td>Chandru R</td>
+        <td>Pooja J</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9285</td>
+        <td>Author Feedback Report</td>
+        <td>Unassigned</td>
+        <td>Pradhesh Kumar R</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9274</td>
+        <td>L3 | GSW | SE Notification Not Triggered After Completion of Two Reviews – lithosphere_2025_134</td>
+        <td>Peer Review</td>
+        <td>Lochana P</td>
+        <td>Ajmal Dhahsin K</td>
+        <td>Pooja J</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9273</td>
+        <td>configure quick_actions for jmir</td>
+        <td>Dashboard</td>
+        <td>Nitya S</td>
+        <td>Prince Daniel</td>
+        <td>Pooja J</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9263</td>
+        <td>PPL Researcher dashboard email to address changes for authors</td>
+        <td>Dashboard</td>
+        <td>Akash selvin J</td>
+        <td>Shilpa Veronica</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9241</td>
+        <td>Report Dashboard UI | Discussion and Planning for Integration & Development</td>
+        <td>Final Deliverables</td>
+        <td>Hemamalini</td>
+        <td>Praveenkumar A</td>
+        <td>Nagendran N</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9231</td>
+        <td>Update node version for Proofdatasetter </td>
+        <td>DevOps</td>
+        <td>Lekha Shree</td>
+        <td>Lekha Shree</td>
+        <td>Akash selvin J</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9224</td>
+        <td>SEG | Sign off Bugs </td>
+        <td>Unassigned</td>
+        <td>balaji a</td>
+        <td>Bala</td>
+        <td>Bala</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9216</td>
+        <td>handling prefix while structuring link node</td>
+        <td>LaTex Typesetting</td>
+        <td>Ajay</td>
+        <td>Ajay</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9213</td>
+        <td>PPL | Draft decision letter fails to save</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>Ajmal Dhahsin K</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9212</td>
+        <td>Extension of due date before acceptance is not reflecting in any of the emails, landing pages, chasers</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>dharshini PK</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9211</td>
+        <td>PPL | Editing of reviewer details is not working</td>
+        <td>Peer Review</td>
+        <td>Shiva Karthikeyan</td>
+        <td>Ajmal Dhahsin K</td>
+        <td>Pooja J</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9208</td>
+        <td>Reviewer extension is not working shows up invalid due date</td>
+        <td>Peer Review</td>
+        <td>ArunRam</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>dharshini PK</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9166</td>
+        <td>Sign in with a Kriyadocs account </td>
+        <td>User Management</td>
+        <td>Arvindh kumar K</td>
+        <td>Arvindh kumar K</td>
+        <td>Harini S</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9157</td>
+        <td>PDS adding functionParams in components config</td>
+        <td>LaTex Typesetting</td>
+        <td>Ajay</td>
+        <td>Ajay</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9138</td>
+        <td>Files doesn't show up in editor page after author revision</td>
+        <td>Peer Review</td>
+        <td>Chandru R</td>
+        <td>Chandru R</td>
+        <td>Harini S</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9124</td>
+        <td>Document what is done in current Pretransformation process</td>
+        <td>Final Deliverables</td>
+        <td>Nagendran N</td>
+        <td>Hemamalini</td>
+        <td>Nagendran N</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9067</td>
+        <td>Enable name and email copy functionality in reviewer history</td>
+        <td>Peer Review</td>
+        <td>Arvindh kumar K</td>
+        <td>Arvindh kumar K</td>
+        <td>Harini S</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9039</td>
+        <td>CLONE - Take Home Message spacing</td>
+        <td>Proof</td>
+        <td>Lekha Shree</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9038</td>
+        <td>CLONE - Articles with no "Cite this article" text</td>
+        <td>Proof</td>
+        <td>Lekha Shree</td>
+        <td>Lekha Shree</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-9035</td>
+        <td>Enable LQC for Author Query</td>
+        <td>LQC</td>
+        <td>Kavitha Priyadharshni</td>
+        <td>Kavitha Priyadharshni</td>
+        <td>Sushmitha Ravindrakumar</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8978</td>
+        <td>UX improvements in Reviewer assignment widget</td>
+        <td>Peer Review</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Harini S</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8961</td>
+        <td>Transfer UI view is not linked to the "Open manuscript" button when author dashboard</td>
+        <td>Peer Review</td>
+        <td>ArunRam</td>
+        <td>Shilpa Veronica</td>
+        <td>Harini S</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8944</td>
+        <td>Display Author Suffix Field in Reference Editor</td>
+        <td>References</td>
+        <td>Pravesh MS</td>
+        <td>Pravesh MS</td>
+        <td>Vignesh</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8928</td>
+        <td>Option to Retain Edits for Titles in Reference Editor</td>
+        <td>References</td>
+        <td>Pravesh MS</td>
+        <td>Pravesh MS</td>
+        <td>Vignesh</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8912</td>
+        <td>Display Last Follow-up Details in Invite & Track Widget</td>
+        <td>Peer Review</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Abishekkumar</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8885</td>
+        <td>L3 | The associate editor decision is missing in the review history section - lithosphere_2025_115, lithosphere_2025_138, Lithosphere_2024_172</td>
+        <td>Peer Review</td>
+        <td>dharshini PK</td>
+        <td>Arvindh kumar K</td>
+        <td>Harini S</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8859</td>
+        <td>SEG  researcher dashboard issues</td>
+        <td>Peer Review</td>
+        <td>Pooja J</td>
+        <td>Shilpa Veronica</td>
+        <td>Harini S</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8835</td>
+        <td>PPL | Chaser use case for reassignment of editors from the flyout</td>
+        <td>Peer Review</td>
+        <td>Shiva Karthikeyan</td>
+        <td>Shiva Sharvesh</td>
+        <td>Abishekkumar</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8816</td>
+        <td>Error logging for all the errors thrown</td>
+        <td>LaTex Typesetting</td>
+        <td>Ajay</td>
+        <td>Ajay</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8740</td>
+        <td>Proof Failure Analyzation</td>
+        <td>LaTex Typesetting</td>
+        <td>Ajay</td>
+        <td>Ajay</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8725</td>
+        <td>Latex Log Parser</td>
+        <td>LaTex Typesetting</td>
+        <td>Ajay</td>
+        <td>Ajay</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8650</td>
+        <td>Manual/automated rejection for transfer offers without response</td>
+        <td>Peer Review</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Harini S</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8557</td>
+        <td>Bibman reference Validation</td>
+        <td>References</td>
+        <td>Vignesh</td>
+        <td>Srirangan K</td>
+        <td>Vignesh</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8541</td>
+        <td> Ensure Hidden Fields Are Not Submitted or Validated </td>
+        <td>Submission</td>
+        <td>Prince Daniel</td>
+        <td>Chandru R</td>
+        <td>Pooja J</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8540</td>
+        <td>Enforce Conditional Validation Rules on a Field </td>
+        <td>Submission</td>
+        <td>Prince Daniel</td>
+        <td>Chandru R</td>
+        <td>Pooja J</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8504</td>
+        <td>Validate Existing Author Invitations Before Sending New Invite </td>
+        <td>Submission</td>
+        <td>ArunRam</td>
+        <td>Arvindh kumar K</td>
+        <td>dharshini PK</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8492</td>
+        <td>Indicate Contextual Inline Comments in Decision Emails</td>
+        <td>Peer Review</td>
+        <td>balaji a</td>
+        <td>balaji a</td>
+        <td>Harini S</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8485</td>
+        <td>Auto-Validate Uploaded Figure Image Resolution</td>
+        <td>Submission</td>
+        <td>Akash selvin J</td>
+        <td>Krithika S</td>
+        <td>dharshini PK</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8411</td>
+        <td>PPL | Download supplementary files doesn't work</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Pooja J</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8410</td>
+        <td>PPL | Confirmation email gets duplicated</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>balaji a</td>
+        <td>Harini S</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8406</td>
+        <td>RCGP - Incorrect structure of Reference with bold brackets in Proofing</td>
+        <td>Proof</td>
+        <td>Akash Raman</td>
+        <td>Akash Raman</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8367</td>
+        <td>PPL | Extra files got during author revision gets dropped</td>
+        <td>Submission</td>
+        <td>Akash selvin J</td>
+        <td>Krithika S</td>
+        <td>dharshini PK</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8320</td>
+        <td>Generate and Store Multiple Cover Image Versions from Single Upload</td>
+        <td>Editor</td>
+        <td>dharshini PK</td>
+        <td>Tharun</td>
+        <td>dharshini PK</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8234</td>
+        <td>Accuracy improvement in References</td>
+        <td>References</td>
+        <td>Srirangan K</td>
+        <td>Srirangan K</td>
+        <td>Abishekkumar</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8196</td>
+        <td>Reporting</td>
+        <td>References</td>
+        <td>Srirangan K</td>
+        <td>Srirangan K</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8160</td>
+        <td>Template spec for RSOS</td>
+        <td>Proof</td>
+        <td>Ajay</td>
+        <td>Ajay</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8149</td>
+        <td>Mechanism to correct the shortfall by pushing content from the next page</td>
+        <td>Proof</td>
+        <td>Ramnath K</td>
+        <td>Ramnath K</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-8035</td>
+        <td>MJS | Radio button format issue</td>
+        <td>Configuration</td>
+        <td>Merclin A</td>
+        <td>Ajmal Dhahsin K</td>
+        <td>Harini S</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-7771</td>
+        <td>Resolve issues faced in the conversion process of edp science articles</td>
+        <td>Pre-Editing & Checks</td>
+        <td>Pushpalatha D</td>
+        <td>Rahul RR</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-7464</td>
+        <td>Constructing simple reports queries in elastic</td>
+        <td>Pre-Editing & Checks</td>
+        <td>Pradhesh Kumar R</td>
+        <td>Pradhesh Kumar R</td>
+        <td>Sundar Raman</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-3417</td>
+        <td>Contextual locking of submission form at acceptance resubmission with ability to replace manuscript without overwriting form metadata</td>
+        <td>Submission</td>
+        <td>Nitya S</td>
+        <td>Prince Daniel</td>
+        <td>dharshini PK</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-3370</td>
+        <td>Testing results, all system Logs Monitoring , API performance and healthcheck monitoring in ELK or Grafana</td>
+        <td>Functional</td>
+        <td>Tharun</td>
+        <td>Tharun</td>
+        <td>dharshini PK</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1465</td>
+        <td>Kriya xml schema validation</td>
+        <td>Platform</td>
+        <td>Hemamalini</td>
+        <td>Unassigned</td>
+        <td>Hemamalini</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1384</td>
+        <td>PPL | Critical bugs</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>balaji a</td>
+        <td>Pooja J</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1376</td>
+        <td>PPL | Not able to view reviewers beyond 1000 row items</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>Arvindh kumar K</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1334</td>
+        <td>L3 | Issue with Article Submission Confirmation Email Sender Address</td>
+        <td>Peer Review</td>
+        <td>balaji a</td>
+        <td>balaji a</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1168</td>
+        <td>L3 | Authors are unable to access the articles called from the stub</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1163</td>
+        <td>Review completed but recommendation not being updated (Editor not able to sign off)</td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>Arvindh kumar K</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1152</td>
+        <td>Inability to change due dates for Invitation Stubs on Kriyadocs native submissions despite previous functionality</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1089</td>
+        <td>Editor as an author / reviewer and CoI firewalling </td>
+        <td>Peer Review</td>
+        <td>balaji a</td>
+        <td>balaji a</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1096</td>
+        <td>Handling of multiple saved drafts </td>
+        <td>Peer Review</td>
+        <td>Akash selvin J</td>
+        <td>Prince Daniel</td>
+        <td>Harini S</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-5393</td>
+        <td>eLife - AHF testing Feedback points</td>
+        <td>Proof</td>
+        <td>Akash Raman</td>
+        <td>Akash Raman</td>
+        <td>Abishekkumar</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-7459</td>
+        <td>SSO functionality</td>
+        <td>Peer Review</td>
+        <td>RAGHU VISHNU S</td>
+        <td>Chandru R</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-1175</td>
+        <td>Ability for editor to remove a reviewer from the shortlisted reviewer list</td>
+        <td>Peer Review</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Maurus Maria Rubenson A</td>
+        <td>Pooja J</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-840</td>
+        <td>Continuous Pagination with "Run-On" Articles </td>
+        <td>Issue Binder</td>
+        <td>dharshini PK</td>
+        <td>Tharun</td>
+        <td>dharshini PK</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-2175</td>
+        <td>JAFF | Portugese translation - Peer review</td>
+        <td>Configuration</td>
+        <td>balaji a</td>
+        <td>balaji a</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-6160</td>
+        <td>Unable to invite author/reviewer-suggested reviewers — "Invite Now" triggers reload without action</td>
+        <td>Peer Review</td>
+        <td>Nitya S</td>
+        <td>Unassigned</td>
+        <td>Unassigned</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+      <tr>
+        <td>KRIYAEP-5276</td>
+        <td>BMJ | Package creator | Analyse convert XSLT that uses 2.0 to use 1.0 using XSLTProc and remove node-xslt-java-bridge dependency</td>
+        <td>Final Deliverables</td>
+        <td>Praveenkumar A</td>
+        <td>Praveenkumar A</td>
+        <td>Nagendran N</td>
+        <td class="Delayed">Delayed</td>
+      </tr>
+      
+    </tbody>
+  </table>
+</details>
+
+
+<footer>Generated by Kriyadocs Weekly Dashboard Automation</footer>
 </body>
 </html>
